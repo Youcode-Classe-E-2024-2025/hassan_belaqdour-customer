@@ -16,8 +16,8 @@ class CreateResponsesTable extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->foreignId('ticket_id')->constrained()->onDelete('cascade'); // Clé étrangère vers tickets
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Clé étrangère vers users
+            $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
