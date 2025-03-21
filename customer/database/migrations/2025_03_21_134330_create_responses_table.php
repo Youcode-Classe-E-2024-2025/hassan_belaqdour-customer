@@ -1,9 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTicketsTable extends Migration
+class CreateResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +13,11 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('responses', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->enum('status', ['open', 'in progress', 'closed'])->default('open'); // Exemple de statut
+            $table->text('content');
+            $table->foreignId('ticket_id')->constrained()->onDelete('cascade'); // Clé étrangère vers tickets
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Clé étrangère vers users
-            $table->foreignId('agent_id')->nullable()->constrained('users')->onDelete('set null'); // Clé étrangère vers users (agent)
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('responses');
     }
 }
