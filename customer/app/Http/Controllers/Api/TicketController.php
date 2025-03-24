@@ -13,11 +13,13 @@ class TicketController extends Controller
         $this->ticketService = $ticketService;
     }
 
-    public function index()
-    {
-        $tickets = $this->ticketService->getAllTickets();
-        return response()->json($tickets);
-    }
+    public function index(Request $request)
+{
+    $filters = $request->only('status', 'assigned_to');
+    $perPage = $request->input('per_page', 10);
+    $tickets = $this->ticketService->getAllTickets($filters, $perPage);
+    return response()->json($tickets);
+}
 
     public function store(Request $request)
     {
