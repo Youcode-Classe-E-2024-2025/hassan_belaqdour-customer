@@ -1,49 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Services\ResponseService;
 use Illuminate\Http\Request;
 
 class ResponseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $responseService;
+
+    public function __construct(ResponseService $responseService)
     {
-        //
+        $this->responseService = $responseService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $response = $this->responseService->createResponse($request->all());
+        return response()->json($response, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $response = $this->responseService->getResponseById($id);
+        return response()->json($response);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $response = $this->responseService->updateResponse($id, $request->all());
+        return response()->json($response);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $this->responseService->deleteResponse($id);
+        return response()->json(null, 204);
     }
 }
