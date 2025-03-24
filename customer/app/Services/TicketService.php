@@ -7,10 +7,21 @@ use App\Models\Ticket;
 
 class TicketService
 {
-public function getAllTickets()
-{
-return Ticket::all();
-}
+    public function getAllTickets(array $filters = [], int $perPage = 10)
+    {
+        $query = Ticket::query();
+
+        // Appliquer les filtres
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+        if (isset($filters['assigned_to'])) {
+            $query->where('assigned_to', $filters['assigned_to']);
+        }
+
+        // Pagination
+        return $query->paginate($perPage);
+    }
 
 public function createTicket(array $data)
 {
