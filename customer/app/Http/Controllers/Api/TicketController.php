@@ -1,49 +1,45 @@
 <?php
+namespace App\Http\Controllers;
 
-namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Controller;
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $ticketService;
+
+    public function __construct(TicketService $ticketService)
+    {
+        $this->ticketService = $ticketService;
+    }
+
     public function index()
     {
-        //
+        $tickets = $this->ticketService->getAllTickets();
+        return response()->json($tickets);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $ticket = $this->ticketService->createTicket($request->all());
+        return response()->json($ticket, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $ticket = $this->ticketService->getTicketById($id);
+        return response()->json($ticket);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $ticket = $this->ticketService->updateTicket($id, $request->all());
+        return response()->json($ticket);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $this->ticketService->deleteTicket($id);
+        return response()->json(null, 204);
     }
 }
