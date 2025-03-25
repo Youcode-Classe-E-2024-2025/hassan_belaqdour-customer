@@ -44,7 +44,8 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                  */
                 'annotations' => [
-                    base_path('app'),
+                     // Add this line
+                    base_path('app/OpenApi'),
                 ],
             ],
         ],
@@ -65,7 +66,7 @@ return [
              * Middleware allows to prevent unexpected access to API documentation
              */
             'middleware' => [
-                'api' => [],
+                'api' => ['web'],
                 'asset' => [],
                 'docs' => [],
                 'oauth2_callback' => [],

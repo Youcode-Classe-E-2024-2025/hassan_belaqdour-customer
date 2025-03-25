@@ -8,12 +8,12 @@ use Tests\TestCase;
 
 class TicketServiceTest extends TestCase
 {
-    use RefreshDatabase; // Reset la base de données après chaque test
+    use RefreshDatabase;
 
     public function test_getAllTickets_returns_all_tickets()
     {
         // Arrange
-        Ticket::factory()->count(3)->create(); // Créer 3 tickets de test
+        Ticket::factory()->count(3)->create();
         $ticketService = new TicketService();
 
         // Act

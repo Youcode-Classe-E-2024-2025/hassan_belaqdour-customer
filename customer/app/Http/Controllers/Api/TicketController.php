@@ -1,6 +1,8 @@
 <?php
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
 
@@ -13,13 +15,11 @@ class TicketController extends Controller
         $this->ticketService = $ticketService;
     }
 
-    public function index(Request $request)
-{
-    $filters = $request->only('status', 'assigned_to');
-    $perPage = $request->input('per_page', 10);
-    $tickets = $this->ticketService->getAllTickets($filters, $perPage);
-    return response()->json($tickets);
-}
+    public function index()
+    {
+        $tickets = $this->ticketService->getAllTickets();
+        return response()->json($tickets);
+    }
 
     public function store(Request $request)
     {
@@ -38,7 +38,6 @@ class TicketController extends Controller
         $ticket = $this->ticketService->updateTicket($id, $request->all());
         return response()->json($ticket);
     }
-
     public function destroy(int $id)
     {
         $this->ticketService->deleteTicket($id);
