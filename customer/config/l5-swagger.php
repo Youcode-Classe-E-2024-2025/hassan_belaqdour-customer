@@ -8,7 +8,7 @@ return [
                 'title' => 'CustomerCareAPI - Swagger UI',
             ],
             'routes' => [
-                'api' => 'api/documentation',
+                'api' => 'api/documentation', // This will be overridden
             ],
             'paths' => [
                 'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', false),

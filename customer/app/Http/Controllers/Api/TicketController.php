@@ -7,20 +7,6 @@ use App\Services\TicketService;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 
-/**
- * @OA\Info(
- *      version="1.0.0",
- *      title="CustomerCareAPI - Tickets",
- *      description="API pour la gestion des tickets d'assistance.",
- *      @OA\Contact(
- *          email="your.email@example.com"
- *      ),
- *     @OA\License(
- *         name="Apache 2.0",
- *         url="http://www.apache.org/licenses/LICENSE-2.0.html"
- *     )
- * )
- */
 class TicketController extends Controller
 {
     protected $ticketService;
