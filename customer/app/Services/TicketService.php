@@ -1,42 +1,44 @@
 <?php
-
 namespace App\Services;
 
+use App\Models\Message;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class TicketService
+class MessageService
 {
-    public function getAllTickets()
+    /**
+     * Create a new message for a ticket.
+     *
+     * @param array $data
+     * @param int $ticketId
+     * @return Message
+     */
+    public function createMessage(array $data, $ticketId)
     {
-        return Ticket::all();
+        // Ensure the ticket exists
+        $ticket = Ticket::findOrFail($ticketId);
+
+        // Add ticket and user IDs to the data
+        $data['ticket_id'] = $ticket->id;
+        $data['user_id'] = auth()->id(); // Use the authenticated user ID
+
+        // Create and return the message
+        return Message::create($data);
     }
 
-    public function createTicket(array $data)
-    {
-        // Set default status if not provided
-        if (!isset($data['status'])) {
-            $data['status'] = Ticket::STATUS_OPEN;
-        }
+    /**
+     * Get all messages for a specific ticket.
+     *
+     * @param int $ticketId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
 
-        return Ticket::create($data);
+    public function getMessagesForTicket($ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+
+        // Retourner une collection de messages
+        return $ticket->messages()->get();
     }
 
-    public function getTicketById(int $id)
-    {
-        return Ticket::with(['user', 'assignedTo', 'responses'])->findOrFail($id);
-    }
-
-    public function updateTicket(int $id, array $data)
-    {
-        $ticket = Ticket::findOrFail($id);
-        $ticket->update($data);
-        return $ticket->fresh();
-    }
-
-    public function deleteTicket(int $id)
-    {
-        $ticket = Ticket::findOrFail($id);
-        return $ticket->delete();
-    }
 }

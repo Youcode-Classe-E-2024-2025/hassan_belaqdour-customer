@@ -13,14 +13,14 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'status' => $this->faker->randomElement([
-                Ticket::STATUS_OPEN,
-                Ticket::STATUS_IN_PROGRESS,
-                Ticket::STATUS_CLOSED
-            ]),
+            'status' => $this->faker->randomElement(['open', 'in_progress', 'resolved', 'closed']),
+            'priority' => $this->faker->randomElement(['low', 'medium', 'high']),
+            'client_id' => User::factory(), // Assumes you have a User factory
+            'agent_id' => $this->faker->boolean(70) ? User::factory() : null, // 70% chance of having an agent
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

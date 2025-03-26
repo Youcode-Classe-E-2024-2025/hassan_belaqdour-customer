@@ -9,32 +9,37 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    // Les champs qui peuvent être remplis via la méthode create
     protected $fillable = [
-        'user_id',
         'title',
         'description',
         'status',
-        'assigned_to',
+        'priority',
+        'client_id',
+        'agent_id',
     ];
 
-    const STATUS_OPEN = 'open';
-    const STATUS_IN_PROGRESS = 'in progress';
-    const STATUS_CLOSED = 'closed';
-
-
-    public function user()
+    // Définir la relation avec le modèle User (Client)
+    public function client()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'client_id');
     }
 
-    public function responses()
+    // Définir la relation avec le modèle User (Agent)
+    public function agent()
     {
-        return $this->hasMany(Response::class);
+        return $this->belongsTo(User::class, 'agent_id');
     }
 
-    // Relation avec l'agent (l'utilisateur assigné au ticket)
-    public function assignedTo()
+    // Définir la relation avec le modèle Response (Réponses aux tickets)
+    public function messages()
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->hasMany(Message::class);
+    }
+
+    // Définir la relation avec le modèle ActivityLog (Historique des actions)
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

@@ -2,44 +2,50 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; // Importez le trait HasApiTokens
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable; // Utilisez le trait HasApiTokens
+    use HasApiTokens;
+    use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [ // Correction ici, c'était protected function casts(): array
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    // Relation avec les tickets (client)
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'client_id');
+    }
+
+    // Relation avec les tickets (agent)
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'agent_id');
+    }
+
+    // Relation avec les réponses
+    public function messagses()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    // Relation avec l'historique des actions
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }
